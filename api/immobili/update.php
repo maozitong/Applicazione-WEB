@@ -4,10 +4,10 @@ include_once(CONNECT_DB_PATHFILE);
 $raw_data = file_get_contents('php://input');
 $input = json_decode($raw_data, true); //Decodifica il JSON in un array associativo
 
-$nome = $input['name'];
-$email = $input['email'];
+$tipo = $input['tipo'];
+$prezzoVendita = $input['prezzoVendita'];
 
-$sql = "UPDATE users SET email = '" . $email . "' WHERE name ='" . $nome ."'";
+$sql = "UPDATE immobili SET superficie = '" . $superficie . "' WHERE tipo ='" . $tipo ."'";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {

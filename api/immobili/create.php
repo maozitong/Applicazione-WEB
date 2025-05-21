@@ -6,14 +6,12 @@ $_POST = json_decode(file_get_contents("php://input"), true);
 
 //echo json_encode($_POST);
 
-$nome = $_POST['name'];
-$gender = $_POST['gender'];
-$email = $_POST['email'];
-$mobile = $_POST['mobile'];
-$address = $_POST['address'];
+$tipo = $_POST['tipo'];
+$prezzoVendita = $_POST['prezzoVendita'];
+$superficie = $_POST['superficie'];
 
-$sql = "INSERT INTO users (name, gender, email, mobile, address) VALUES 
-    ('" . $nome . "', '" . $gender . "', '" . $email . "', '" . $mobile . "', '" . $address . "')";
+$sql = "INSERT INTO immobili (name, gender, email, mobile, address) VALUES 
+    ('" . $tipo . "', '" . $prezzoVendita . "', '" . $prezzoVendita . "')";
 
 $result = mysqli_query($conn, $sql);
 

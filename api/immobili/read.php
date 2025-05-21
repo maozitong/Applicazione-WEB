@@ -2,7 +2,7 @@
 include_once(CONNECT_DB_PATHFILE);
 
 $users = array();
-$sql = 'SELECT * FROM `users`';
+$sql = 'SELECT * FROM `immobili`';
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
