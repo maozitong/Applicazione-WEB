@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Immobili - Agenzia Immobiliare</title>
+    <style>
+        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }
+        input[type="text"], input[type="number"] { margin: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>Gestione Immobili</h1>
+
+    <!-- Form di creazione -->
+    <h2>Aggiungi Immobile</h2>
+    <form id="createForm">
+        <input type="text" name="tipo" placeholder="Tipo" required>
+        <input type="number" name="prezzoVendita" placeholder="Prezzo Vendita" required>
+        <input type="number" name="superficie" placeholder="Superficie (mq)" required>
+        <button type="submit">Aggiungi</button>
+    </form>
+
+    <!-- Form di aggiornamento -->
+    <h2 id="updateTitle" style="display:none;">Modifica Immobile</h2>
+    <form id="updateForm" style="display:none;">
+        <input type="hidden" name="id">
+        <input type="text" name="tipo" placeholder="Tipo" required>
+        <input type="number" name="prezzoVendita" placeholder="Prezzo Vendita" required>
+        <input type="number" name="superficie" placeholder="Superficie (mq)" required>
+        <button type="submit">Aggiorna</button>
+        <button type="button" onclick="annullaModifica()">Annulla</button>
+    </form>
+
+    <h2>Lista Immobili</h2>
+    <table id="immobiliTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Prezzo Vendita</th>
+                <th>Superficie</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            caricaImmobili();
+
+            // CREATE
+            document.getElementById('createForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const data = {
+                    tipo: this.tipo.value,
+                    prezzoVendita: this.prezzoVendita.value,
+                    superficie: this.superficie.value
+                };
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'create.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        caricaImmobili();
+                        document.getElementById('createForm').reset();
+                    } else {
+                        console.error("Errore create:", xhr.responseText);
+                    }
+                };
+                xhr.send(JSON.stringify(data));
+            });
+
+            // UPDATE
+            document.getElementById('updateForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const data = {
+                    id: this.id.value,
+                    tipo: this.tipo.value,
+                    prezzoVendita: this.prezzoVendita.value,
+                    superficie: this.superficie.value
+                };
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'update.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        caricaImmobili();
+                        annullaModifica();
+                    } else {
+                        console.error("Errore update:", xhr.responseText);
+                    }
+                };
+                xhr.send(JSON.stringify(data));
+            });
+        });
+
+        // LETTURA / RICARICA
+        function caricaImmobili() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/5b_php_crud/index.php/immobili', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    try {
+                        const immobili = JSON.parse(xhr.responseText);
+                        const tbody = document.querySelector('#immobiliTable tbody');
+                        tbody.innerHTML = '';
+
+                        immobili.forEach(immobile => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${immobile.IDImmobile}</td>
+                                <td>${immobile.tipo}</td>
+                                <td>€ ${immobile.prezzoVendita}</td>
+                                <td>${immobile.superficie} mq</td>
+                                <td>
+                                    <button onclick="modificaImmobile(${immobile.IDImmobile}, '${immobile.tipo}', ${immobile.prezzoVendita}, ${immobile.superficie})">Modifica</button>
+                                    <button onclick="eliminaImmobile(${immobile.IDImmobile})">Elimina</button>
+                                </td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    } catch (e) {
+                        console.error("Errore JSON parsing:", xhr.responseText);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        // PRECOMPILA UPDATE FORM
+        function modificaImmobile(id, tipo, prezzoVendita, superficie) {
+            document.getElementById('updateForm').style.display = 'block';
+            document.getElementById('updateTitle').style.display = 'block';
+
+            const form = document.getElementById('updateForm');
+            form.querySelector('[name="id"]').value = id;
+            form.querySelector('[name="tipo"]').value = tipo;
+            form.querySelector('[name="prezzoVendita"]').value = prezzoVendita;
+            form.querySelector('[name="superficie"]').value = superficie;
+        }
+
+        // ANNULLA MODIFICA
+        function annullaModifica() {
+            const form = document.getElementById('updateForm');
+            form.reset();
+            form.style.display = 'none';
+            document.getElementById('updateTitle').style.display = 'none';
+        }
+
+        // DELETE
+        function eliminaImmobile(id) {
+            if (confirm("Sei sicuro di voler eliminare questo immobile?")) {
+                const data = { id: id };
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'delete.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        caricaImmobili();
+                    } else {
+                        console.error("Errore delete:", xhr.responseText);
+                    }
+                };
+                xhr.send(JSON.stringify(data));
+            }
+        }
+    </script>
+
+</body>
+</html>

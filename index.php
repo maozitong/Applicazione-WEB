@@ -1,46 +1,32 @@
 <?php
-header("Access-Control-Allow-Origin: *"); //rende accessibile le pagine PHP a qualsiasi dominio
-header("Content-Type: application/json; charset=UTF-8"); //restituisce un contenuto di tipo JSON, codificato in UTF-8
-header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE"); //rendono accessibile i metodi HTTP elencati
-header("Access-Control-Max-Age: 3600"); //tempo di refresh (tempo di durata della cache)
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
+header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Definizione delle costanti per il progetto
-define('PROJECT_NAME', '5B_php_crud');
-define('CONNECT_DB_PATHFILE', __DIR__ . '/config/connect.php');
+define('PROJECT_NAME', '5b_php_crud'); // usa il nome corretto della tua cartella, minuscolo
 
-
-// Gestione delle rotte
-$request = $_SERVER['REQUEST_URI'];
+$request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
-
-switch ($request) {
-    case '/' . PROJECT_NAME . '/index.php/users':
-        if ($method == 'GET') {
-            require __DIR__ . '/api/users/read.php';
-        } elseif ($method == 'PUT') {
-            require __DIR__ . '/api/users/update.php';
-        } elseif ($method == 'POST') {
-            require __DIR__ . '/api/users/create.php';
-        } elseif ($method == 'DELETE') {
-            require __DIR__ . '/api/users/delete.php';
+switch (true) {
+    case $request === '/' . PROJECT_NAME . '/index.php/immobili':
+        if ($method === 'GET') {
+            require DIR . '/api/immobili/read.php';
+        } elseif ($method === 'PUT') {
+            require DIR . '/api/immobili/update.php';
+        } elseif ($method === 'POST') {
+            require DIR . '/api/immobili/create.php';
+        } elseif ($method === 'DELETE') {
+            require DIR . '/api/immobili/delete.php';
+        } else {
+            http_response_code(405);
+            echo json_encode(["message" => "Metodo HTTP non consentito"]);
         }
         break;
-    // case preg_match('/\/users\/(\d+)/', $request, $matches) ? $request : !$request:
-    //     if ($method == 'GET') {
-    //         $id = $matches[1];
-    //         require __DIR__ . '/api/users/read.php';
-    //     } elseif ($method == 'PUT') {
-    //         $id = $matches[1];
-    //         require __DIR__ . '/api/users/update.php';
-    //     } elseif ($method == 'DELETE') {
-    //         $id = $matches[1];
-    //         require __DIR__ . '/api/users/delete.php';
-    //     }
-    //     break;
+
     default:
-        echo "Pagina iniziale";
         http_response_code(404);
         echo json_encode(["message" => "Risorsa non trovata"]);
         break;

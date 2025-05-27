@@ -1,8 +1,8 @@
 <?php
 $host = "localhost";
 $username = "root";
-$password = "root";
-$database = "crud";
+$password = "";
+$database = "agenziaimmobiliare";
 
 // Connessione al database
 $conn = new mysqli($host, $username, $password, $database);

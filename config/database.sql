@@ -42,9 +42,9 @@ CREATE TABLE IF NOT EXISTS possiede
 	codiceFiscale CHAR(16) NOT NULL,
 	idImmobile INT NOT NULL,
 	CONSTRAINT possiede_pk PRIMARY KEY (codiceFiscale, idImmobile),
-	CONSTRAINT possiede_fk_immobili FOREIGN KEY (idImmobile) REFERENCES immobili (IDImmobile),
+	CONSTRAINT possiede_fk_immobili FOREIGN KEY (idImmobile) REFERENCES immobili (IDImmobile)
 	ON UPDATE CASCADE
-	ON DELETE NO ACTION
+	ON DELETE NO ACTION,
 	CONSTRAINT possiede_fk_proprietari FOREIGN KEY (codiceFiscale) REFERENCES proprietari (codiceFiscale)
 	ON UPDATE CASCADE 
 	ON DELETE NO ACTION
@@ -55,9 +55,9 @@ CREATE TABLE IF NOT EXISTS composto
 	idImmobile INT NOT NULL,
 	idVano INT NOT NULL,
 	CONSTRAINT composto_pk PRIMARY KEY (idImmobile, idVano),
-	CONSTRAINT composto_fk_immobili FOREIGN KEY (idImmobile) REFERENCES immobili (IDImmobile),
+	CONSTRAINT composto_fk_immobili FOREIGN KEY (idImmobile) REFERENCES immobili (IDImmobile)
 	ON UPDATE CASCADE
-	ON DELETE NO ACTION
+	ON DELETE NO ACTION,
 	CONSTRAINT composto_fk_vani FOREIGN KEY (idVano) REFERENCES vani (IDVano)
 	ON UPDATE CASCADE 
 	ON DELETE NO ACTION
@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS contiene
 	idPertinenza INT NOT NULL,
 	metratura DOUBLE NOT NULL,
 	CONSTRAINT contiene_pk PRIMARY KEY (idImmobile, idPertinenza),
-	CONSTRAINT contiene_fk_immobili FOREIGN KEY (idImmobile) REFERENCES immobili (IDImmobile),
+	CONSTRAINT contiene_fk_immobili FOREIGN KEY (idImmobile) REFERENCES immobili (IDImmobile)
 	ON UPDATE CASCADE
-	ON DELETE NO ACTION
+	ON DELETE NO ACTION,
 	CONSTRAINT contiene_fk_pertinenze FOREIGN KEY (idPertinenza) REFERENCES pertinenze(IDPertinenza)
 	ON UPDATE CASCADE 
 	ON DELETE NO ACTION
