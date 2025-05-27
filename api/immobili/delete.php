@@ -1,5 +1,6 @@
 <?php
-include_once(CONNECT_DB_PATHFILE);
+include_once __DIR__ . '/../../config/connect.php';
+
     $_POST = json_decode(file_get_contents("php://input"), true);
     $id = $_POST['IDImmobile'];
     $sql = "DELETE FROM immobili WHERE IDImmobile = $id";

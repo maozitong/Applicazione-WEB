@@ -1,5 +1,5 @@
 <?php
-include_once DIR . '/../../config/connect.php';
+include_once __DIR__ . '/../../config/connect.php';
 
 $raw_data = file_get_contents('php://input');
 $input = json_decode($raw_data, true); //Decodifica il JSON in un array associativo

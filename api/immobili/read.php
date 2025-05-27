@@ -1,5 +1,5 @@
 <?php
-include_once(CONNECT_DB_PATHFILE);
+include_once __DIR__ . '/../../config/connect.php';
 
 $users = array();
 $sql = 'SELECT * FROM `immobili`';

@@ -1,5 +1,5 @@
 <?php
-include_once(CONNECT_DB_PATHFILE);
+include_once __DIR__ . '/../../config/connect.php';
 
 //Per leggere i dati in arrivo da un form in formato JSON
 $_POST = json_decode(file_get_contents("php://input"), true);
